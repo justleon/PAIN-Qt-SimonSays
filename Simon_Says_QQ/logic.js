@@ -1,6 +1,8 @@
 function startNew() {
     if(!isGamePlayed) {
         isGamePlayed = true
+        aiSequence.length = 0
+        playerSequence.length = 0
         score = 0.0
         combo = 1.0
         attempts = 0
@@ -10,16 +12,15 @@ function startNew() {
 
 function aiTurn() {
     aiSequence.push(Math.floor(Math.random() * panelSize * panelSize))
+    playAiSequence = [...aiSequence]
+    playAiSequence.reverse()
 
-    for(var i = 0; i < aiSequence.length; i++)
-        buttonsPanel.itemAt(aiSequence[i]).animation()
-
-    isPlayerTurn = true
+    root.checkSequence()
 }
 
 function playerTurn(i) {
     var flag = true
-    if(isPlayerTurn) {
+    if(isPlayerTurn && isGamePlayed) {
         playerSequence.push(i)
 
         for(var j = 0; j < playerSequence.length; j++) {
@@ -56,8 +57,7 @@ function playerTurn(i) {
 }
 
 function stopGame() {
-    aiSequence.length = 0
-    playerSequence.length = 0
+    playAiSequence.length = 0
     isPlayerTurn = false
     isGamePlayed = false
 }

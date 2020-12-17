@@ -22,13 +22,26 @@ Window {
     property bool isGamePlayed: false
 
     property variant aiSequence: []
+    property variant playAiSequence: []
     property variant playerSequence: []
 
+    signal checkSequence
+    onCheckSequence: {
+        if(playAiSequence.length !== 0) {
+            var index = playAiSequence.pop()
+            buttonsPanel.itemAt(index).animate()
+        } else {
+            isPlayerTurn = true;
+        }
+    }
+
+    //GUI
     GridLayout {
         id: mainLayout
         anchors.fill: parent
         rows: 2
 
+        //tool bar
         Rectangle {
             Layout.row: 0
             Layout.fillWidth: true
@@ -89,6 +102,7 @@ Window {
             }
         }
 
+        //buttons panel
         Grid {
             Layout.row: 1
             Layout.fillWidth: true
@@ -102,6 +116,7 @@ Window {
 
             property real buttonWidth: (width - (columns - 1) * spacing) / columns
             property real buttonHeight: (height - (rows - 1) * spacing) / rows
+            property int lightUpTime: 750
 
             Repeater {
                 id: buttonsPanel
@@ -125,25 +140,28 @@ Window {
                     SequentialAnimation on color {
                         id: diodeLightUp
                         running: false
+                        onRunningChanged: {
+                            if(!diodeLightUp.running) root.checkSequence();
+                        }
 
                         ColorAnimation {
                             to: "darkgreen"
-                            duration: 750
+                            duration: buttonsGrid.lightUpTime
                         }
 
                         ColorAnimation {
                             to: "gray"
-                            duration: 750
+                            duration: buttonsGrid.lightUpTime
                         }
                     }
-
-                    function animation() {
-                        diodeLightUp.start()
+                    function animate() {
+                        diodeLightUp.start();
                     }
                 }
             }
         }
 
+        //stats bar
         Rectangle {
             Layout.row: 2
             Layout.fillWidth: true
@@ -187,6 +205,7 @@ Window {
         }
     }
 
+    //settings window
     Dialog {
         id: propertiesDialog
         modality: Qt.WindowModal
@@ -196,12 +215,14 @@ Window {
             if(clickedButton === StandardButton.Ok) {
                 root.panelSize = settingSize.currentValue
                 root.lives = settingLives.currentValue
+                buttonsGrid.lightUpTime = settingLightUpTime.currentValue
             }
         }
 
         ColumnLayout {
             width: parent.width
 
+            //panel size
             Label {
                 text: "Panel size"
                 Layout.fillWidth: true
@@ -214,6 +235,20 @@ Window {
                 Layout.fillWidth: true
             }
 
+            //button light up time
+            Label {
+                text: "Button light up time"
+                Layout.fillWidth: true
+            }
+
+            ComboBox {
+                id: settingLightUpTime
+                model: ["500", "750", "1000"]
+                currentIndex: 1
+                Layout.fillWidth: true
+            }
+
+            //maximum tries
             Label {
                 text: "Possible attempts"
                 Layout.fillWidth: true
@@ -228,6 +263,7 @@ Window {
         }
     }
 
+    //game over window
     Dialog {
         id: gameOverDialog
         modality: Qt.WindowModal
@@ -237,7 +273,7 @@ Window {
             width: parent.width
 
             Label {
-                text: "Game over!\nYou did your best!"
+                text: "Game Over!\nYou did your best!"
                 horizontalAlignment: Label.AlignHCenter
                 Layout.fillWidth: true
             }
