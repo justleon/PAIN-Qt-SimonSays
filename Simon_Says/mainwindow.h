@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTime>
 #include "button.h"
 #include "panel.h"
 #include "panelbuttons.h"

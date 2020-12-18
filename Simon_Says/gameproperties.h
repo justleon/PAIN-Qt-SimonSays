@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QMessageBox>
 #include <QSequentialAnimationGroup>
+#include <QRandomGenerator>
 #include "panelbuttons.h"
 
 class GameProperties : public QObject
@@ -18,10 +19,10 @@ public:
     GameProperties();
     void animationClear();
 
-public slots:
     void setGamePlayed();
     void setPlayerTurn();
 
+public slots:
     void aiTurn();
     void playerTurn(int i);
     void resetGame();

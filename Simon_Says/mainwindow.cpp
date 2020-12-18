@@ -7,9 +7,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
-
     properties = new GameProperties();
     settings = new SettingsDialog();
 

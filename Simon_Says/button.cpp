@@ -18,7 +18,7 @@ void Button::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     QPen borderPen;
     borderPen.setWidth(0);
 
-    if(isInteractive){
+    if(isInteractive) {
         if(isPressed)
         {
             painter->setBrush(QBrush(Qt::darkRed));

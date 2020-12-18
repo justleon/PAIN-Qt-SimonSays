@@ -40,7 +40,7 @@ void GameProperties::setPlayerTurn()
 void GameProperties::aiTurn()
 {
     anim.clear();
-    AISequence.append(qrand() % (boardSize * boardSize));
+    AISequence.append(QRandomGenerator::global()->generate() % (boardSize * boardSize));
 
     for(int i = 0; i < AISequence.length(); i++)
     {

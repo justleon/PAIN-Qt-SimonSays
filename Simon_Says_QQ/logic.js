@@ -13,9 +13,16 @@ function startNew() {
 function aiTurn() {
     aiSequence.push(Math.floor(Math.random() * panelSize * panelSize))
     playAiSequence = [...aiSequence]
-    playAiSequence.reverse()
+    checkSequence()
+}
 
-    root.checkSequence()
+function checkSequence() {
+    if(playAiSequence.length !== 0) {
+        var index = playAiSequence.shift()
+        buttonsPanel.itemAt(index).animAccess.start()
+    } else {
+        isPlayerTurn = true;
+    }
 }
 
 function playerTurn(i) {

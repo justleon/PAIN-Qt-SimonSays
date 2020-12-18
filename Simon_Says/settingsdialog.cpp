@@ -25,6 +25,8 @@ int SettingsDialog::panelSize()
             return 4;
         case 3:
             return 5;
+        default:
+            return 3;
     }
 }
 

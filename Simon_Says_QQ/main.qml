@@ -25,16 +25,6 @@ Window {
     property variant playAiSequence: []
     property variant playerSequence: []
 
-    signal checkSequence
-    onCheckSequence: {
-        if(playAiSequence.length !== 0) {
-            var index = playAiSequence.pop()
-            buttonsPanel.itemAt(index).animate()
-        } else {
-            isPlayerTurn = true;
-        }
-    }
-
     //GUI
     GridLayout {
         id: mainLayout
@@ -60,6 +50,8 @@ Window {
                 Button {
                     id: startButton
                     text: "Start"
+                    Layout.preferredHeight: 100
+                    Layout.preferredWidth: 100
 
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -70,6 +62,8 @@ Window {
                 Button {
                     id: stopButton
                     text: "Stop"
+                    Layout.preferredHeight: 100
+                    Layout.preferredWidth: 100
 
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -80,6 +74,8 @@ Window {
                 Button {
                     id: propertiesButton
                     text: "Properties"
+                    Layout.preferredHeight: 100
+                    Layout.preferredWidth: 100
 
                     Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -93,11 +89,13 @@ Window {
                 Button {
                     id: exitButton
                     text: "Exit"
+                    Layout.preferredHeight: 100
+                    Layout.preferredWidth: 100
 
                     Layout.fillHeight: true
                     Layout.fillWidth: true
 
-                    onClicked: root.close()
+                    onClicked: Qt.quit()
                 }
             }
         }
@@ -125,6 +123,7 @@ Window {
                 Rectangle {
                     id: button
                     property int idx: index
+                    property alias animAccess: lightUp
 
                     height: buttonsGrid.buttonHeight
                     width: buttonsGrid.buttonWidth
@@ -138,10 +137,10 @@ Window {
                     }
 
                     SequentialAnimation on color {
-                        id: diodeLightUp
+                        id: lightUp
                         running: false
                         onRunningChanged: {
-                            if(!diodeLightUp.running) root.checkSequence();
+                            if(!lightUp.running) Logic.checkSequence()
                         }
 
                         ColorAnimation {
@@ -153,9 +152,6 @@ Window {
                             to: "gray"
                             duration: buttonsGrid.lightUpTime
                         }
-                    }
-                    function animate() {
-                        diodeLightUp.start();
                     }
                 }
             }
@@ -172,12 +168,13 @@ Window {
             height: root.height * 0.1
 
             anchors.top: root.bottom
+            Layout.leftMargin: 1
+            Layout.rightMargin: 1
             color: "lightgray"
 
             RowLayout {
                 anchors.fill: parent
                 spacing: 10
-
 
                 Repeater {
                     id: statistics
